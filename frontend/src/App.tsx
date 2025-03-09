@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import axios from "axios";
+import { SignUp, UserButton, useUser } from "@clerk/clerk-react";
 
 function App() {
-  const [data, setData] = useState<string | null>(null);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/")
-      .then((res) => {
-        setData(JSON.stringify(res.data, null, 2));
-      })
-      .catch((err) => {
-        setData("Error fetching data");
-      });
-  }, []);
+  const { isSignedIn, user } = useUser();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-5">
-      <h1 className=" text-white text-2xl font-bold mb-4">API Response</h1>
-      <pre className=" text-white p-4 rounded shadow-md">{data}</pre>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-5">
+      <h1 className="text-2xl font-bold mb-4">Welcome to StoreIt</h1>
+
+      {!isSignedIn ? (
+        <div>
+          <SignUp />
+        </div>
+      ) : (
+        <div className="text-center">
+          <p className="text-lg">Hello, {user?.fullName}!</p>
+          <UserButton />
+        </div>
+      )}
     </div>
   );
 }

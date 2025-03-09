@@ -1,35 +1,38 @@
-// import { useUser } from "@clerk/clerk-react";
-import { Outlet } from "react-router-dom";
-// import { Navigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
+import { Navigate, Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import MobileNavigation from "../components/MobileNavigation";
+import Header from "../components/Header";
 
 const DashboardLayout = () => {
-  //   const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
 
-  //   console.log(isSignedIn);
+  console.log("isSignedIn:", isSignedIn, "isLoaded:", isLoaded);
 
-  //     if (!isSignedIn) {
-  //       return <Navigate to="/auth/sign-in" />;
-  //     }
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/auth/sign-in" replace />;
+  }
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white p-4">
-        <h2 className="text-xl font-bold">StoreIt</h2>
-        <nav className="mt-4">
-          <ul>
-            <li className="py-2 hover:bg-gray-700 px-2 rounded">Dashboard</li>
-            <li className="py-2 hover:bg-gray-700 px-2 rounded">Files</li>
-            <li className="py-2 hover:bg-gray-700 px-2 rounded">Settings</li>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <Outlet />
-      </main>
-    </div>
+    <main className="flex h-screen">
+      <Sidebar />
+      <section className="flex h-full flex-1 flex-col">
+        <MobileNavigation />
+        <Header />
+        <div className="main-content">
+          <Outlet /> {/* Nested routes will render here */}{" "}
+        </div>
+      </section>
+      {/* <Toaster /> */}
+    </main>
   );
 };
 

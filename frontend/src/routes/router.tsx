@@ -3,6 +3,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import SignInPage from "../pages/auth/SignIn";
 import Dashboard from "../pages/Dashboard";
+import ContentPage from "../pages/ContentPage"; // Dynamic page handler
 import { JSX } from "react";
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Dashboard />,
+      },
+      {
+        path: ":type", // Dynamic routing for documents, images, media, others
+        element: <ContentPage />,
       },
     ],
   },

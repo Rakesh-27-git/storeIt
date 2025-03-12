@@ -60,22 +60,8 @@ const Sidebar = () => {
         alt="logo"
         width={506}
         height={418}
-        className="w-full"
+        className="w-72"
       />
-
-      {/* <div className="sidebar-user-info">
-        <img
-          src={avatar}
-          alt="Avatar"
-          width={44}
-          height={44}
-          className="sidebar-user-avatar"
-        />
-        <div className="hidden lg:block">
-          <p className="subtitle-2 capitalize">{fullName}</p>
-          <p className="caption">{email}</p>
-        </div>
-      </div> */}
     </aside>
   );
 };

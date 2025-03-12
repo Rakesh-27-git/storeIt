@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import MobileNavigation from "../components/MobileNavigation";
 import Header from "../components/Header";
+import { Toaster } from "sonner";
 
 const DashboardLayout = () => {
   const { isSignedIn, isLoaded } = useUser();
@@ -28,10 +29,10 @@ const DashboardLayout = () => {
         <MobileNavigation />
         <Header />
         <div className="main-content">
-          <Outlet /> {/* Nested routes will render here */}{" "}
+          <Outlet /> {/* Nested routes will render here */}
         </div>
       </section>
-      {/* <Toaster /> */}
+      <Toaster />
     </main>
   );
 };

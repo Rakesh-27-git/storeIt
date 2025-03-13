@@ -2,12 +2,25 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../constants/services/api";
 import Card from "../components/Card";
+import { getFileTypesParams } from "../lib/utils";
 
 const ContentPage = () => {
-  const { type } = useParams<{ type: string }>();
-  const [files, setFiles] = useState<Record<string, any>>({});
+  const { type = "" } = useParams<{ type: string }>();
+  interface File {
+    key: string;
+    doc_type: string;
+    url: string;
+    name: string;
+    size: number;
+    created_at: string;
+    [key: string]: string | number | boolean | object;
+  }
+
+  const [files, setFiles] = useState<Record<string, File>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const allowedTypes = getFileTypesParams(type); // Get allowed file types for the page
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -16,8 +29,14 @@ const ContentPage = () => {
           user_id: "user_29w83sxmDNGwOuEthce5gg56FcC",
         });
 
-        const structuredFiles = createFolderStructure(response.data);
-        setFiles(structuredFiles);
+        const userId = "user_29w83sxmDNGwOuEthce5gg56FcC";
+        const filteredFiles = response.data.filter((file: File) =>
+          allowedTypes.includes(file.doc_type)
+        );
+
+        const structuredFiles = createFolderStructure(filteredFiles);
+        setFiles(structuredFiles[userId] || {});
+        // Ensure it doesn't break if no files match
       } catch (err) {
         setError("Failed to fetch files.");
         console.error("Failed to fetch files", err);
@@ -25,12 +44,11 @@ const ContentPage = () => {
         setLoading(false);
       }
     };
-
     fetchFiles();
-  }, [type]);
+  }, [type, allowedTypes]);
 
   // Function to create folder structure from file list
-  const createFolderStructure = (files: any[]) => {
+  const createFolderStructure = (files: File[]) => {
     const structure: Record<string, any> = {};
 
     files.forEach((file) => {
@@ -39,10 +57,8 @@ const ContentPage = () => {
 
       parts.forEach((part: string, index: number) => {
         if (index === parts.length - 1) {
-          // Last part, assign the file object
-          current[part] = file;
+          current[part] = file; // Last part is the file
         } else {
-          // Create nested folder if it doesn't exist
           if (!current[part]) {
             current[part] = {};
           }
@@ -53,8 +69,6 @@ const ContentPage = () => {
 
     return structure;
   };
-
-  console.log(files);
 
   return (
     <div className="page-container">
@@ -77,10 +91,10 @@ const ContentPage = () => {
         <p className="error-message">{error}</p>
       ) : loading ? (
         <p className="loading-message">Loading files...</p>
-      ) : files.length > 0 ? (
+      ) : Object.keys(files).length > 0 ? (
         <section className="file-list">
-          {files.map((file) => (
-            <Card key={file.name} file={file} />
+          {Object.keys(files).map((key) => (
+            <Card key={key} file={files[key]} />
           ))}
         </section>
       ) : (

@@ -5,6 +5,7 @@ import { cn, convertFileToUrl, getFileType } from "../lib/utils";
 import Thumbnail from "./Thumbnail";
 import API from "../constants/services/api";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 const FileUploader = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -25,6 +26,7 @@ const FileUploader = () => {
             prevFiles.filter((f) => f.name !== file.name)
           );
         }
+        window.location.reload();
       });
     });
 
@@ -80,7 +82,7 @@ const FileUploader = () => {
   return (
     <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
-      <button type="button" className={cn("uploader-button")}>
+      <Button type="button" className={cn("uploader-button",)}>
         <img
           src="/assets/icons/upload.svg"
           alt="upload"
@@ -88,7 +90,7 @@ const FileUploader = () => {
           height={24}
         />{" "}
         <p>Upload</p>
-      </button>
+      </Button>
       {files.length > 0 && (
         <ul className="uploader-preview-list">
           <h4 className="h4 text-light-100">Uploading</h4>

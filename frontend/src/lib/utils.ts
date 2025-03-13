@@ -168,3 +168,17 @@ export const getFileIcon = (
 };
 
 
+export const getFileTypesParams = (type: string) => {
+  switch (type) {
+    case "documents":
+      return ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+    case "images":
+      return ["image/png", "image/jpeg", "image/gif", "image/webp"];
+    case "media":
+      return ["video/mp4", "video/mpeg", "audio/mpeg", "audio/wav"];
+    case "others":
+      return ["application/zip", "application/x-rar-compressed"];
+    default:
+      return ["application/pdf"]; // Default to documents if type is unknown
+  }
+};

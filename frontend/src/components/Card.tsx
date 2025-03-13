@@ -1,10 +1,28 @@
 import { Link } from "react-router-dom";
 import Thumbnail from "./Thumbnail";
 import FormattedDateTime from "./FormattedDateTime";
+import { convertFileSize } from "../lib/utils";
+import ActionDropdown from "./ActionDropdown";
 
+interface File {
+  key: string;
+  doc_type: string;
 
-const Card = ({ file }: { file: Models.Document }) => {
-  console.log("file", file);
+  url: string;
+  name: string;
+  size: number;
+  created_at: string;
+  $updatedAt: string; // TODO: Remove this
+  [key: string]: string | number;
+}
+
+interface CardProps {
+  file: File;
+}
+
+const Card = ({ file }: CardProps) => {
+  const files = file.key.split("/");
+  const fileName = files[files.length - 1];
   const fileInfo = file.doc_type.split("/");
   const extension = fileInfo[1];
   const type = fileInfo[0];
@@ -19,9 +37,13 @@ const Card = ({ file }: { file: Models.Document }) => {
           className="!size-20"
           imageClassName="!size-11"
         />
+        <div className="flex flex-col items-end justify-between">
+          <ActionDropdown file={file} />
+          <p className="body-1">{convertFileSize(file.size)}</p>
+        </div>
       </div>
       <div className="file-card-details">
-        <p className="subtitle-2 line-clamp-1">{file.name}</p>
+        <p className="subtitle-2 line-clamp-1">{fileName}</p>
         <FormattedDateTime
           date={file.created_at}
           className="body-2 text-light-100"

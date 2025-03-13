@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { useState } from "react";
 import FileUploader from "./FileUploader";
+import { Button } from "./ui/button";
 
 const MobileNavigation = () => {
   const [open, setOpen] = useState(false);
@@ -86,7 +87,7 @@ const MobileNavigation = () => {
 
           <div className="flex flex-col justify-between gap-5 pb-5">
             <FileUploader /> //TODO: Implement FileUploader
-            <button
+            <Button
               type="submit"
               className="mobile-sign-out-button"
               // onClick={async () => await signOutUser()} //TODO: Implement signOutUser
@@ -98,7 +99,7 @@ const MobileNavigation = () => {
                 height={24}
               />
               <p>Logout</p>
-            </button>
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
